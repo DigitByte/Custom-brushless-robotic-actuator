@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!-- Basic differential drive mobile base -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="my_robot">
+
+  <!-- Base Link -->
+  <link name="base_link"/>
+
+  <!-- Joint Link -->
+  <link name="link1">
+    <visual>
+      <geometry>
+        <cylinder length="0.1" radius="0.05"/>
+      </geometry>
+      <origin xyz="0 0 0.1"/>
+      <material name="blue"/>
+    </visual>
+  </link>
+
+  <!-- Revolute Joint -->
+  <joint name="joint1" type="revolute">
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="1.0" velocity="2.0" lower="-1.57" upper="1.57"/>
+  </joint>
+
+  <ros2_control name="odrive" type="system"> 
+    <hardware>
+      <plugin>odrive_ros2_control_plugin/ODriveHardwareInterface</plugin>
+      <param name="can">can1</param>
+    </hardware>
+    <joint name="joint1">
+      <param name="node_id">0</param>
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control> 
+
+</robot>
